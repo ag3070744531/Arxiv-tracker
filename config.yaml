@@ -7,10 +7,10 @@
 #
 # 项目目标：
 # 1. 自动发现相关论文
-# 2. 对论文进行简单中文总结
+# 2. 对论文进行简单总结
 # 3. 帮助快速判断是否值得进一步阅读
 #
-# 论文的详细方法、实验和创新由后续人工阅读完成
+# 论文的详细方法、实验和创新由人工阅读完成
 # ============================================================
 
 
@@ -29,19 +29,15 @@ categories:
 # ============================================================
 # 2. 搜索关键词
 #
-# 注意：
 # Arxiv-tracker 会自动在：
 # - title
 # - abstract
 # - comments
 #
-# 中搜索关键词，并自动处理部分空格/连字符变体。
+# 中搜索关键词，并自动处理空格/连字符变体。
 #
-# 因此不要配置过多近义词，否则容易出现：
-#
-# 414 URI Too Long
-#
-# keywords 内部是 OR 关系。
+# keywords 内部为 OR。
+# 不设置过多关键词，避免 414 URI Too Long。
 # ============================================================
 
 keywords:
@@ -61,7 +57,7 @@ keywords:
   - "incremental event detection"
   - "online event detection"
 
-  # 新兴事件发现
+  # 新兴事件检测
   - "emerging event detection"
 
   # 图方法
@@ -74,10 +70,7 @@ keywords:
 # ============================================================
 # 3. 排除关键词
 #
-# 避免 event detection 匹配到明显无关方向。
-#
-# 排除词也不要设置太多，
-# 否则同样会增加 arXiv 查询 URL 长度。
+# 避免 event detection 匹配到明显无关领域。
 # ============================================================
 
 exclude_keywords:
@@ -96,26 +89,13 @@ exclude_keywords:
 # ============================================================
 # 4. 查询逻辑
 #
-# 实际逻辑大致为：
+# 实际逻辑：
 #
-# (cs.SI OR cs.IR OR cs.CL OR cs.LG OR cs.AI)
-#
+# (categories...)
 # AND
-#
-# (
-#   social event detection
-#   OR social media event detection
-#   OR event discovery
-#   OR ...
-# )
-#
+# (keywords...)
 # AND NOT
-#
-# (
-#   event camera
-#   OR video event detection
-#   OR ...
-# )
+# (exclude_keywords...)
 # ============================================================
 
 logic: "AND"
@@ -133,8 +113,6 @@ max_results: 30
 #
 # lastUpdatedDate：
 # 按最近更新时间排序。
-#
-# 适合每日追踪新论文和论文更新。
 # ============================================================
 
 sort_by: "lastUpdatedDate"
@@ -155,11 +133,8 @@ lang: "both"
 # ============================================================
 # 8. 摘要设置
 #
-# 使用 LLM 做简单摘要。
-#
-# tldr：
-# 只生成简短总结，
-# 不进行详细 Method Card / 深入分析。
+# 使用 LLM 生成简短 TL;DR。
+# 不生成详细 Method Card。
 # ============================================================
 
 summary:
@@ -185,7 +160,6 @@ email:
   # GitHub Actions Secret：
   # SMTP_PASS
   #
-  # 注意：
   # 使用 QQ 邮箱 SMTP 授权码，
   # 不是 QQ 登录密码。
   smtp_pass_env: "SMTP_PASS"
@@ -212,34 +186,29 @@ email:
 # ============================================================
 # 10. LLM 配置
 #
-# 当前使用：
-# SiliconFlow + Qwen2.5-7B-Instruct
+# 使用：
+# DeepSeek-V4-Flash-Vision-Exp
 #
-# 这里只负责简单理解摘要并生成简短总结。
+# DeepSeek 官方 OpenAI-Compatible API
 # ============================================================
 
 llm:
 
   provider: "openai-compatible"
 
-  # SiliconFlow
-  base_url: "https://api.siliconflow.cn"
+  # DeepSeek API
+  base_url: "https://api.deepseek.com"
 
-  # 模型
-  model: "Qwen/Qwen2.5-7B-Instruct"
+  # DeepSeek V4 Flash Vision Experimental
+  model: "deepseek-v4-flash-vision-exp"
 
   # GitHub Actions Secret：
-  # OPENAI_COMPAT_API_KEY
-  api_key_env: "OPENAI_COMPAT_API_KEY"
-
-
-  # ----------------------------------------------------------
-  # 如果以后使用 DeepSeek，可以改成：
   #
-  # base_url: "https://api.deepseek.com"
-  # model: "deepseek-chat"
-  # api_key_env: "DS_API_KEY"
-  # ----------------------------------------------------------
+  # DS_API_KEY
+  #
+  # 注意：
+  # 这里必须填写 DeepSeek 官方 API Key。
+  api_key_env: "DS_API_KEY"
 
 
   # ==========================================================
@@ -257,11 +226,6 @@ llm:
     1. what problem the paper studies,
     2. what main method it uses,
     3. what main result or conclusion it reports.
-
-    If relevant, briefly indicate whether the paper is related to
-    social event detection, event discovery, event clustering,
-    online or incremental detection, graph-based methods,
-    or multimodal methods.
 
     Keep the summary concise and objective.
     Do not invent information that is not provided.
@@ -282,10 +246,6 @@ llm:
     1. 论文研究什么问题；
     2. 使用了什么主要方法；
     3. 得到了什么主要结果或结论。
-
-    如果适用，可以简单指出论文属于：
-    社交事件检测、事件发现、事件聚类、
-    在线/增量检测、图方法或多模态方法中的哪一类。
 
     保持简洁、客观。
     不要补充原文中没有提供的信息。
@@ -328,7 +288,7 @@ site:
   # light / dark / auto
   theme: "light"
 
-  # 主题色
+  # 页面主题色
   accent: "#2563eb"
 
 
@@ -339,14 +299,14 @@ site:
 freshness:
 
   # ----------------------------------------------------------
-  # 当前设置：
+  # 第一次初始化时可以使用：
   #
-  # 3650 = 大约过去 10 年
+  # since_days: 3650
   #
-  # 第一次运行适合用于补历史论文。
+  # 用于补充历史论文。
   #
-  # 等历史论文扫描完成后，
-  # 推荐修改为：
+  # 等历史论文初始化完成后，
+  # 建议修改为：
   #
   # since_days: 7
   #
@@ -358,34 +318,29 @@ freshness:
   # 已经出现过的论文不重复推送
   unique_only: true
 
-  # 去重状态保存位置
+  # 去重状态文件
   state_path: ".state/seen.json"
 
-  # 如果今天没有新论文，
-  # 不使用旧论文补齐
+  # 今天没有新论文时，
+  # 不拿旧论文补齐
   fallback_when_empty: false
 
 
 # ============================================================
-# 14. 代码 / 项目主页抓取
-#
-# 自动尝试查找：
-# - GitHub
-# - Code
-# - Project Page
-# - Dataset
+# 14. 论文代码 / 项目主页抓取
 # ============================================================
 
 scrape:
 
-  # 优先读取 arXiv HTML 页面
+  # 优先读取 arXiv HTML
   html: true
 
-  # HTML 中没找到时尝试 PDF
+  # HTML 没找到代码链接时，
+  # 尝试 PDF
   pdf_if_missing: true
 
   # 不强制扫描每篇 PDF 第一页
   pdf_first_page: false
 
-  # 请求超时时间
+  # 网络请求超时时间
   timeout: 10
