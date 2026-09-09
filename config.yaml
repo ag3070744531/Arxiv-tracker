@@ -1,9 +1,16 @@
 # ============================================================
 # Arxiv-tracker 配置文件
+#
 # 研究方向：
 # Internet Social Media Analysis
 # Social Event Detection
-# Unsupervised / Incremental / Graph-based / Multimodal Event Detection
+#
+# 项目目标：
+# 1. 自动发现相关论文
+# 2. 对论文进行简单中文总结
+# 3. 帮助快速判断是否值得进一步阅读
+#
+# 论文的详细方法、实验和创新由后续人工阅读完成
 # ============================================================
 
 
@@ -20,241 +27,95 @@ categories:
 
 
 # ============================================================
-# 2. 关键词
+# 2. 搜索关键词
 #
 # 注意：
+# Arxiv-tracker 会自动在：
+# - title
+# - abstract
+# - comments
+#
+# 中搜索关键词，并自动处理部分空格/连字符变体。
+#
+# 因此不要配置过多近义词，否则容易出现：
+#
+# 414 URI Too Long
+#
 # keywords 内部是 OR 关系。
-#
-# 最终查询逻辑大致为：
-#
-# (cs.SI OR cs.IR OR cs.CL OR cs.LG OR cs.AI)
-# AND
-# (keyword1 OR keyword2 OR keyword3 ...)
-#
-# 并不是要求所有关键词同时出现。
 # ============================================================
 
 keywords:
 
-  # ----------------------------------------------------------
-  # A. Social Event Detection 核心关键词
-  # ----------------------------------------------------------
-
+  # 核心 Social Event Detection
   - "social event detection"
   - "social media event detection"
-  - "event detection in social media"
-  - "event detection on social media"
-  - "social media events"
 
-  # ----------------------------------------------------------
-  # B. Event Discovery / Detection
-  # ----------------------------------------------------------
-
+  # Event Discovery / Clustering
   - "event discovery"
-  - "event identification"
-  - "event detection"
-  - "emerging event detection"
-  - "emerging event discovery"
-
-  # ----------------------------------------------------------
-  # C. 社交媒体场景
-  # ----------------------------------------------------------
-
-  - "social media event"
-  - "social network event"
-  - "microblog event detection"
-  - "Twitter event detection"
-  - "Weibo event detection"
-  - "online social event"
-
-  # ----------------------------------------------------------
-  # D. 无监督事件检测
-  # ----------------------------------------------------------
-
-  - "unsupervised event detection"
-  - "unsupervised social event detection"
-  - "unsupervised event discovery"
-  - "self-supervised event detection"
-
-  # ----------------------------------------------------------
-  # E. 增量 / 在线 / 流式 Event Detection
-  # ----------------------------------------------------------
-
-  - "incremental event detection"
-  - "incremental social event detection"
-  - "online event detection"
-  - "streaming event detection"
-  - "stream event detection"
-  - "real-time event detection"
-  - "dynamic event detection"
-
-  # ----------------------------------------------------------
-  # F. Event Clustering
-  # ----------------------------------------------------------
-
   - "event clustering"
-  - "social event clustering"
-  - "social media clustering"
-  - "online event clustering"
-  - "incremental event clustering"
 
-  # ----------------------------------------------------------
-  # G. 图学习 / GNN / 图聚类
-  # ----------------------------------------------------------
+  # 无监督事件检测
+  - "unsupervised event detection"
 
+  # 增量 / 在线事件检测
+  - "incremental event detection"
+  - "online event detection"
+
+  # 新兴事件发现
+  - "emerging event detection"
+
+  # 图方法
   - "graph-based event detection"
-  - "graph event detection"
-  - "graph-based event discovery"
-  - "graph-based event clustering"
-  - "graph neural network event detection"
-  - "GNN event detection"
-  - "heterogeneous graph event detection"
-  - "dynamic graph event detection"
 
-  # ----------------------------------------------------------
-  # H. 社交事件图表示
-  # ----------------------------------------------------------
-
-  - "social event graph"
-  - "event graph"
-  - "social graph clustering"
-  - "social media graph clustering"
-  - "heterogeneous information network event detection"
-
-  # ----------------------------------------------------------
-  # I. Structural Entropy
-  #
-  # 你最近阅读的：
-  # Hierarchical and Incremental Structural Entropy Minimization
-  # for Unsupervised Social Event Detection
-  # 就属于这一类。
-  # ----------------------------------------------------------
-
-  - "structural entropy"
-  - "structural entropy minimization"
-  - "graph entropy event detection"
-  - "entropy-based event detection"
-
-  # ----------------------------------------------------------
-  # J. 表示学习
-  # ----------------------------------------------------------
-
-  - "event representation learning"
-  - "social event representation"
-  - "social media representation learning"
-  - "event embedding"
-  - "social event embedding"
-
-  # ----------------------------------------------------------
-  # K. 对比学习 / 自监督
-  # ----------------------------------------------------------
-
-  - "contrastive learning event detection"
-  - "contrastive event detection"
-  - "self-supervised social event detection"
-  - "contrastive event clustering"
-
-  # ----------------------------------------------------------
-  # L. Transformer / PLM
-  # ----------------------------------------------------------
-
-  - "transformer event detection"
-  - "BERT event detection"
-  - "pretrained language model event detection"
-  - "language model event detection"
-
-  # ----------------------------------------------------------
-  # M. LLM + Event Detection
-  #
-  # 用于跟踪新兴的大模型方法。
-  # ----------------------------------------------------------
-
-  - "large language model event detection"
-  - "LLM event detection"
-  - "large language model event discovery"
-  - "LLM event discovery"
-  - "large language model event clustering"
-  - "LLM social media analysis"
-
-  # ----------------------------------------------------------
-  # N. 多模态 Social Event Detection
-  # ----------------------------------------------------------
-
+  # 多模态
   - "multimodal event detection"
-  - "multimodal social event detection"
-  - "multimodal event discovery"
-  - "multimodal social media"
-  - "vision language social media event"
-
-  # ----------------------------------------------------------
-  # O. Topic / Story / News Detection
-  #
-  # 与 Event Detection 高度相关，可以补充一些方法论文。
-  # ----------------------------------------------------------
-
-  - "topic detection social media"
-  - "topic discovery social media"
-  - "emerging topic detection"
-  - "story detection social media"
-  - "news event detection"
-  - "breaking news detection"
-
-  # ----------------------------------------------------------
-  # P. Community Detection
-  #
-  # 图聚类和结构熵方法常与 Community Detection 联系紧密。
-  # ----------------------------------------------------------
-
-  - "community detection social media"
-  - "dynamic community detection"
-  - "incremental community detection"
 
 
 # ============================================================
 # 3. 排除关键词
 #
-# 防止 "event detection" 搜到：
-# Event Camera / 视频事件 / 自动驾驶事件 / 传感器事件等无关论文。
+# 避免 event detection 匹配到明显无关方向。
+#
+# 排除词也不要设置太多，
+# 否则同样会增加 arXiv 查询 URL 长度。
 # ============================================================
 
 exclude_keywords:
 
-  # Event Camera / Neuromorphic Vision
+  # Event Camera
   - "event camera"
-  - "event cameras"
-  - "event-based camera"
-  - "event-based vision"
-  - "neuromorphic vision"
-  - "neuromorphic camera"
 
-  # Computer Vision 中的视频事件
+  # 视频事件检测
   - "video event detection"
-  - "video anomaly detection"
-  - "temporal action detection"
-  - "action detection"
-  - "object detection"
 
-  # 自动驾驶 / 机器人传感器
-  - "autonomous driving"
-  - "autonomous vehicle"
-  - "LiDAR"
-  - "radar event detection"
-
-  # 医疗 / 生物
-  - "medical event detection"
+  # 医学事件检测
   - "clinical event detection"
   - "adverse event detection"
-  - "seizure detection"
-  - "ECG"
-
-  # 网络安全异常
-  # 如果以后你也做网络舆情异常检测，可以删除这些。
-  - "network intrusion"
-  - "intrusion detection"
 
 
 # ============================================================
 # 4. 查询逻辑
+#
+# 实际逻辑大致为：
+#
+# (cs.SI OR cs.IR OR cs.CL OR cs.LG OR cs.AI)
+#
+# AND
+#
+# (
+#   social event detection
+#   OR social media event detection
+#   OR event discovery
+#   OR ...
+# )
+#
+# AND NOT
+#
+# (
+#   event camera
+#   OR video event detection
+#   OR ...
+# )
 # ============================================================
 
 logic: "AND"
@@ -271,12 +132,9 @@ max_results: 30
 # 6. 排序方式
 #
 # lastUpdatedDate：
-# 根据最近更新时间排序。
+# 按最近更新时间排序。
 #
-# submittedDate：
-# 根据论文首次提交时间排序。
-#
-# 日常追踪推荐 lastUpdatedDate。
+# 适合每日追踪新论文和论文更新。
 # ============================================================
 
 sort_by: "lastUpdatedDate"
@@ -297,20 +155,16 @@ lang: "both"
 # ============================================================
 # 8. 摘要设置
 #
-# mode:
-# none      = 不生成摘要
-# heuristic = 规则摘要
-# llm       = 大模型摘要
+# 使用 LLM 做简单摘要。
 #
-# scope:
-# tldr = 简要总结
-# full = 详细总结
-# both = 两种都生成
+# tldr：
+# 只生成简短总结，
+# 不进行详细 Method Card / 深入分析。
 # ============================================================
 
 summary:
   mode: "llm"
-  scope: "both"
+  scope: "tldr"
 
 
 # ============================================================
@@ -319,243 +173,128 @@ summary:
 
 email:
 
-  # 是否启用邮件
   enabled: true
 
-  # 邮件主题
+  # 邮件标题
   subject: "[arXiv] Social Event Detection Daily Digest"
 
-  # QQ SMTP
+  # QQ 邮箱 SMTP
   smtp_server: "smtp.qq.com"
   smtp_port: 465
 
-  # QQ 邮箱 SMTP 授权码环境变量
+  # GitHub Actions Secret：
+  # SMTP_PASS
   #
-  # 不要把授权码直接写进 config.yaml
-  #
-  # Linux:
-  #
-  # export SMTP_PASS="xxxxxxxx"
-  #
-  # GitHub Actions:
-  # Settings -> Secrets -> SMTP_PASS
-  #
+  # 注意：
+  # 使用 QQ 邮箱 SMTP 授权码，
+  # 不是 QQ 登录密码。
   smtp_pass_env: "SMTP_PASS"
 
   # auto / ssl / starttls
   tls: "ssl"
 
-  # SMTP 调试日志
+  # SMTP 调试
   debug: false
 
   # simple / full
   detail: "full"
 
-  # 邮件最多放多少篇论文
+  # 邮件最多展示 30 篇
   max_items: 30
 
-  # 是否附加 Markdown 文件
+  # 附加 Markdown 文件
   attach_md: true
 
-  # 是否附加 PDF
+  # 不附加 PDF
   attach_pdf: false
 
 
 # ============================================================
-# 10. LLM
+# 10. LLM 配置
 #
-# 当前方案：
-# SiliconFlow + Qwen
+# 当前使用：
+# SiliconFlow + Qwen2.5-7B-Instruct
+#
+# 这里只负责简单理解摘要并生成简短总结。
 # ============================================================
 
 llm:
 
   provider: "openai-compatible"
 
-  # ----------------------------------------------------------
   # SiliconFlow
-  # ----------------------------------------------------------
-
   base_url: "https://api.siliconflow.cn"
 
+  # 模型
   model: "Qwen/Qwen2.5-7B-Instruct"
 
-  # API Key 环境变量
-  #
-  # Linux:
-  #
-  # export OPENAI_COMPAT_API_KEY="sk-xxxx"
-  #
+  # GitHub Actions Secret：
+  # OPENAI_COMPAT_API_KEY
   api_key_env: "OPENAI_COMPAT_API_KEY"
 
 
   # ----------------------------------------------------------
-  # 如果以后改用 DeepSeek，
-  # 注释上面的 SiliconFlow，
-  # 开启下面三项即可。
-  # ----------------------------------------------------------
-
+  # 如果以后使用 DeepSeek，可以改成：
+  #
   # base_url: "https://api.deepseek.com"
   # model: "deepseek-chat"
   # api_key_env: "DS_API_KEY"
+  # ----------------------------------------------------------
 
 
   # ==========================================================
-  # 英文论文分析 Prompt
+  # 英文摘要 Prompt
   # ==========================================================
 
   system_prompt_en: |
-    You are a senior research assistant specializing in social media analysis
-    and social event detection.
+    You are an academic paper assistant focusing on Social Event Detection
+    and social media analysis.
 
-    Given the metadata and abstract of an academic paper, analyze the paper
-    from the perspective of Social Event Detection.
+    Based on the provided paper title, metadata, and abstract,
+    write a short and clear summary.
 
-    Write an objective and technically precise summary.
+    Briefly explain:
+    1. what problem the paper studies,
+    2. what main method it uses,
+    3. what main result or conclusion it reports.
 
-    Focus especially on:
+    If relevant, briefly indicate whether the paper is related to
+    social event detection, event discovery, event clustering,
+    online or incremental detection, graph-based methods,
+    or multimodal methods.
 
-    1. Research problem and motivation.
-    2. What type of event detection task is studied:
-       supervised, unsupervised, incremental, online, streaming,
-       graph-based, multimodal, or LLM-based.
-    3. Input data:
-       social media posts, text, images, users, hashtags,
-       entities, timestamps, social relations, or multimodal information.
-    4. Core methodology.
-    5. How the paper represents social events.
-    6. Whether graph structures are used and how the graph is constructed.
-    7. Whether clustering, community detection, structural entropy,
-       contrastive learning, GNNs, Transformers, or large language models
-       are used.
-    8. Datasets used.
-    9. Evaluation metrics.
-    10. Main experimental results.
-    11. Main innovation compared with previous methods.
-    12. Limitations and potential future research directions.
-    13. Whether the method supports online or incremental event detection.
-
-    If code, dataset, project, or paper links are provided,
-    preserve them but do not repeat them unnecessarily.
-
-    Do not invent experimental results that are not present in the metadata
-    or abstract.
+    Keep the summary concise and objective.
+    Do not invent information that is not provided.
 
 
   # ==========================================================
-  # 中文论文分析 Prompt
+  # 中文摘要 Prompt
   # ==========================================================
 
   system_prompt_zh: |
-    你是一名专注于互联网社交媒体分析与社交事件检测
-    （Social Event Detection）的资深科研助手。
+    你是一个面向互联网社交媒体分析与
+    Social Event Detection 的论文阅读助手。
 
-    请根据提供的论文标题、摘要、作者、评论信息以及相关链接，
-    从“社交事件检测”的研究视角分析论文。
+    请根据论文标题、元信息和摘要，
+    用一段简洁中文概括论文主要内容。
 
-    重点关注以下内容：
+    简单说明：
+    1. 论文研究什么问题；
+    2. 使用了什么主要方法；
+    3. 得到了什么主要结果或结论。
 
-    1. 研究背景与研究动机：
-       论文试图解决什么问题，以及现有方法存在什么不足。
+    如果适用，可以简单指出论文属于：
+    社交事件检测、事件发现、事件聚类、
+    在线/增量检测、图方法或多模态方法中的哪一类。
 
-    2. 任务类型：
-       判断论文属于以下哪一种或哪几种任务：
-       - Social Event Detection
-       - Unsupervised Event Detection
-       - Incremental Event Detection
-       - Online Event Detection
-       - Streaming Event Detection
-       - Event Discovery
-       - Event Clustering
-       - Graph-based Event Detection
-       - Multimodal Event Detection
-       - LLM-based Event Detection
-
-    3. 输入数据：
-       明确论文使用了哪些社交媒体信息，例如：
-       - 帖子文本
-       - 图片
-       - 用户
-       - Hashtag
-       - 实体
-       - 时间戳
-       - 用户关系
-       - 转发关系
-       - 回复关系
-       - 多模态数据
-
-    4. 核心方法：
-       清楚说明论文的整体方法流程和关键技术。
-
-    5. 事件表示方法：
-       说明论文如何表示一个 social event，
-       例如聚类、图社区、主题、事件向量或其他结构。
-
-    6. 图结构：
-       如果论文使用图模型，请重点说明：
-       - 图中的节点是什么
-       - 图中的边是什么
-       - 图如何构建
-       - 图如何更新
-       - 最终如何从图中发现事件
-
-    7. 关键技术：
-       如果使用以下方法，请明确指出：
-       - Graph Neural Network
-       - Graph Clustering
-       - Community Detection
-       - Structural Entropy
-       - Contrastive Learning
-       - Self-supervised Learning
-       - Transformer
-       - BERT
-       - Large Language Model
-       - Multimodal Learning
-
-    8. 数据集：
-       罗列论文使用的数据集。
-       如果摘要中没有明确提供，不要自行猜测。
-
-    9. 实验指标：
-       说明论文使用的评价指标，例如：
-       - NMI
-       - AMI
-       - ARI
-       - F1
-       - Precision
-       - Recall
-       - Accuracy
-       等。
-
-    10. 主要实验结果：
-        总结论文相对于基线方法取得了什么提升。
-        如果摘要中没有具体数值，不要编造数值。
-
-    11. 论文创新：
-        总结论文相比已有 Social Event Detection 方法的主要创新点。
-
-    12. 局限性：
-        分析该方法可能存在的问题，例如：
-        - 可扩展性
-        - 实时性
-        - 增量更新能力
-        - 图构建成本
-        - 对参数敏感
-        - 对多模态数据支持不足
-        - 对大型社交媒体流适应不足
-
-    13. 与我的研究方向的相关性：
-        判断这篇论文对于
-        “互联网社交媒体中的 Social Event Detection”
-        是否高度相关，并说明原因。
-
-    保持客观、准确、学术化。
-    不要使用营销式表达。
-    不要凭空编造论文中未提供的实验数据或结论。
+    保持简洁、客观。
+    不要补充原文中没有提供的信息。
 
 
 # ============================================================
 # 11. 中文翻译
+#
+# 翻译论文标题和原始摘要。
 # ============================================================
 
 translate:
@@ -564,21 +303,20 @@ translate:
 
   lang: "zh"
 
-  # 翻译论文标题和原始摘要
   fields:
     - "title"
     - "summary"
 
 
 # ============================================================
-# 12. GitHub Pages 静态网站
+# 12. GitHub Pages
 # ============================================================
 
 site:
 
   enabled: true
 
-  # GitHub Pages 输出目录
+  # 网站生成目录
   dir: "docs"
 
   # 网站标题
@@ -590,27 +328,29 @@ site:
   # light / dark / auto
   theme: "light"
 
-  # 页面主题色
+  # 主题色
   accent: "#2563eb"
 
 
 # ============================================================
-# 13. 新鲜度 & 跨天去重
+# 13. Freshness & 去重
 # ============================================================
 
 freshness:
 
   # ----------------------------------------------------------
-  # 推荐：
+  # 当前设置：
   #
-  # 第一次运行：
-  # 3650
+  # 3650 = 大约过去 10 年
   #
-  # 可以补历史论文。
+  # 第一次运行适合用于补历史论文。
   #
-  # 以后每日运行：
-  # 推荐改为 3 ~ 7。
+  # 等历史论文扫描完成后，
+  # 推荐修改为：
   #
+  # since_days: 7
+  #
+  # 用于日常追踪。
   # ----------------------------------------------------------
 
   since_days: 3650
@@ -618,35 +358,34 @@ freshness:
   # 已经出现过的论文不重复推送
   unique_only: true
 
-  # 历史论文 ID
+  # 去重状态保存位置
   state_path: ".state/seen.json"
 
-  # 没有新论文时是否拿旧论文补齐
-  #
-  # false 推荐
-  #
+  # 如果今天没有新论文，
+  # 不使用旧论文补齐
   fallback_when_empty: false
 
 
 # ============================================================
-# 14. 论文代码 / 项目主页抓取
+# 14. 代码 / 项目主页抓取
+#
+# 自动尝试查找：
+# - GitHub
+# - Code
+# - Project Page
+# - Dataset
 # ============================================================
 
 scrape:
 
-  # 优先解析 arXiv HTML 页面
+  # 优先读取 arXiv HTML 页面
   html: true
 
-  # HTML 找不到代码时，再尝试 PDF
+  # HTML 中没找到时尝试 PDF
   pdf_if_missing: true
 
-  # false：
-  # 只有 HTML 没找到时才看 PDF
-  #
-  # true：
-  # 每篇论文都扫 PDF 第一页
-  #
+  # 不强制扫描每篇 PDF 第一页
   pdf_first_page: false
 
-  # 网络请求超时时间
+  # 请求超时时间
   timeout: 10
