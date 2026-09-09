@@ -6,9 +6,9 @@
 # Social Event Detection
 #
 # 项目目标：
-# 1. 自动发现相关论文
-# 2. 对论文进行简单总结
-# 3. 帮助快速判断是否值得进一步阅读
+# 1. 自动发现 Social Event Detection 相关论文
+# 2. 生成简短摘要，帮助快速判断是否值得阅读
+# 3. 尽量减少视频、医疗、工业、天文等无关 Event Detection 论文
 #
 # 论文的详细方法、实验和创新由人工阅读完成
 # ============================================================
@@ -16,74 +16,139 @@
 
 # ============================================================
 # 1. arXiv 分类
+#
+# 优先保留与 Social Event Detection 更相关的领域：
+# - cs.SI：Social and Information Networks
+# - cs.IR：Information Retrieval
+# - cs.CL：NLP
+# - cs.LG：Machine Learning
+#
+# 删除 cs.AI，避免搜索范围过宽。
 # ============================================================
 
 categories:
-  - "cs.SI"   # Social and Information Networks
-  - "cs.IR"   # Information Retrieval
-  - "cs.CL"   # Computation and Language / NLP
-  - "cs.LG"   # Machine Learning
-  - "cs.AI"   # Artificial Intelligence
+  - "cs.SI"
+  - "cs.IR"
+  - "cs.CL"
+  - "cs.LG"
 
 
 # ============================================================
 # 2. 搜索关键词
 #
+# 设计原则：
+#
+# 1. keywords 内部是 OR
+# 2. 因此每一个关键词本身都尽量绑定：
+#    social / social media / microblog
+# 3. 不再使用：
+#    event detection
+#    event discovery
+#    event clustering
+#    multimodal event detection
+#    等过宽关键词
+#
+# 避免再次搜索到：
+# - 视频事件检测
+# - 医疗事件
+# - 工业事件
+# - 天文事件
+# - 一般 NLP Event Extraction
+#
 # Arxiv-tracker 会自动在：
-# - title
-# - abstract
-# - comments
-#
-# 中搜索关键词，并自动处理空格/连字符变体。
-#
-# keywords 内部为 OR。
-# 不设置过多关键词，避免 414 URI Too Long。
+# title / abstract / comments
+# 中搜索，并扩展空格和连字符变体。
 # ============================================================
 
 keywords:
 
-  # 核心 Social Event Detection
+  # ----------------------------------------------------------
+  # A. Social Event Detection 核心任务
+  # ----------------------------------------------------------
+
   - "social event detection"
   - "social media event detection"
+  - "event detection in social media"
+  - "event detection from social media"
 
-  # Event Discovery / Clustering
-  - "event discovery"
-  - "event clustering"
 
-  # 无监督事件检测
-  - "unsupervised event detection"
+  # ----------------------------------------------------------
+  # B. Social Event Discovery
+  # ----------------------------------------------------------
 
-  # 增量 / 在线事件检测
-  - "incremental event detection"
-  - "online event detection"
+  - "social event discovery"
+  - "social media event discovery"
 
-  # 新兴事件检测
-  - "emerging event detection"
 
-  # 图方法
-  - "graph-based event detection"
+  # ----------------------------------------------------------
+  # C. Social Event Clustering
+  # ----------------------------------------------------------
 
-  # 多模态
-  - "multimodal event detection"
+  - "social event clustering"
+  - "social media event clustering"
+
+
+  # ----------------------------------------------------------
+  # D. 无监督 Social Event Detection
+  # ----------------------------------------------------------
+
+  - "unsupervised social event detection"
+
+
+  # ----------------------------------------------------------
+  # E. 增量 / 在线 / 流式 Social Event Detection
+  # ----------------------------------------------------------
+
+  - "incremental social event detection"
+  - "online social event detection"
+  - "streaming social event detection"
+
+
+  # ----------------------------------------------------------
+  # F. 图方法
+  # ----------------------------------------------------------
+
+  - "graph-based social event detection"
+
+
+  # ----------------------------------------------------------
+  # G. 多模态 Social Event Detection
+  # ----------------------------------------------------------
+
+  - "multimodal social event detection"
+
+
+  # ----------------------------------------------------------
+  # H. Microblog 场景
+  #
+  # 可以覆盖 Twitter / Weibo 等典型事件检测工作
+  # ----------------------------------------------------------
+
+  - "microblog event detection"
+
+
+  # ----------------------------------------------------------
+  # I. Social Event Evolution
+  #
+  # 用于关注事件发现后的演化、更新和追踪
+  # ----------------------------------------------------------
+
+  - "social event evolution"
 
 
 # ============================================================
 # 3. 排除关键词
 #
-# 避免 event detection 匹配到明显无关领域。
+# 主关键词已经比较严格，
+# 所以只保留少量明显不相关领域。
 # ============================================================
 
 exclude_keywords:
 
-  # Event Camera
+  # Event Camera / Neuromorphic Vision
   - "event camera"
-
-  # 视频事件检测
-  - "video event detection"
-
-  # 医学事件检测
-  - "clinical event detection"
-  - "adverse event detection"
+  - "event-based vision"
+  - "neuromorphic"
 
 
 # ============================================================
@@ -91,11 +156,28 @@ exclude_keywords:
 #
 # 实际逻辑：
 #
-# (categories...)
+# (
+#   cs.SI
+#   OR cs.IR
+#   OR cs.CL
+#   OR cs.LG
+# )
+#
 # AND
-# (keywords...)
+#
+# (
+#   social event detection
+#   OR social media event detection
+#   OR ...
+# )
+#
 # AND NOT
-# (exclude_keywords...)
+#
+# (
+#   event camera
+#   OR event-based vision
+#   OR neuromorphic
+# )
 # ============================================================
 
 logic: "AND"
@@ -103,16 +185,19 @@ logic: "AND"
 
 # ============================================================
 # 5. 每次最多获取论文数量
+#
+# 高精度追踪不需要每天推 30 篇。
+# 推荐最多 20 篇。
 # ============================================================
 
-max_results: 30
+max_results: 20
 
 
 # ============================================================
-# 6. 排序方式
+# 6. 排序
 #
 # lastUpdatedDate：
-# 按最近更新时间排序。
+# 按最近更新日期排序。
 # ============================================================
 
 sort_by: "lastUpdatedDate"
@@ -122,9 +207,7 @@ sort_order: "descending"
 # ============================================================
 # 7. 输出语言
 #
-# zh   = 中文
-# en   = 英文
-# both = 中英文
+# both = 中英文都保留
 # ============================================================
 
 lang: "both"
@@ -133,8 +216,8 @@ lang: "both"
 # ============================================================
 # 8. 摘要设置
 #
-# 使用 LLM 生成简短 TL;DR。
-# 不生成详细 Method Card。
+# 仅生成 TL;DR 简单摘要，
+# 不做详细 Method Card。
 # ============================================================
 
 summary:
@@ -160,36 +243,40 @@ email:
   # GitHub Actions Secret：
   # SMTP_PASS
   #
-  # 使用 QQ 邮箱 SMTP 授权码，
-  # 不是 QQ 登录密码。
+  # 填 QQ 邮箱 SMTP 授权码
   smtp_pass_env: "SMTP_PASS"
 
-  # auto / ssl / starttls
+  # SMTP 模式
   tls: "ssl"
 
-  # SMTP 调试
+  # 调试模式
   debug: false
 
-  # simple / full
+  # 邮件显示方式
   detail: "full"
 
-  # 邮件最多展示 30 篇
-  max_items: 30
+  # 一封邮件最多展示 20 篇
+  max_items: 20
 
-  # 附加 Markdown 文件
+  # 附带 Markdown
   attach_md: true
 
-  # 不附加 PDF
+  # 不附带 PDF
   attach_pdf: false
 
 
 # ============================================================
 # 10. LLM 配置
 #
-# 使用：
-# DeepSeek-V4-Flash-Vision-Exp
+# 使用 DeepSeek：
+# deepseek-v4-flash-vision-exp
 #
-# DeepSeek 官方 OpenAI-Compatible API
+# 当前项目实际上只传入文本：
+# - title
+# - metadata
+# - abstract
+#
+# Vision 能力暂时不会使用。
 # ============================================================
 
 llm:
@@ -199,15 +286,10 @@ llm:
   # DeepSeek API
   base_url: "https://api.deepseek.com"
 
-  # DeepSeek V4 Flash Vision Experimental
+  # 指定模型
   model: "deepseek-v4-flash-vision-exp"
 
-  # GitHub Actions Secret：
-  #
-  # DS_API_KEY
-  #
-  # 注意：
-  # 这里必须填写 DeepSeek 官方 API Key。
+  # GitHub Actions Secret
   api_key_env: "DS_API_KEY"
 
 
@@ -254,7 +336,14 @@ llm:
 # ============================================================
 # 11. 中文翻译
 #
-# 翻译论文标题和原始摘要。
+# 翻译论文标题与原始摘要。
+#
+# 如果后续希望减少 API 调用，
+# 可以改为：
+#
+# enabled: false
+#
+# 并将 lang 改为 zh。
 # ============================================================
 
 translate:
@@ -276,53 +365,44 @@ site:
 
   enabled: true
 
-  # 网站生成目录
+  # 输出目录
   dir: "docs"
 
   # 网站标题
   title: "Social Event Detection 论文速递"
 
-  # 保留历史页面数量
+  # 历史页面保留数量
   keep_runs: 1024
 
-  # light / dark / auto
+  # 页面主题
   theme: "light"
 
-  # 页面主题色
+  # 主题色
   accent: "#2563eb"
 
 
 # ============================================================
-# 13. Freshness & 去重
+# 13. Freshness & 跨天去重
+#
+# 如果已经完成第一次历史论文初始化，
+# 推荐使用 7 天窗口。
+#
+# 这样每天只搜索最近 7 天，
+# 再结合 seen.json 去重。
 # ============================================================
 
 freshness:
 
-  # ----------------------------------------------------------
-  # 第一次初始化时可以使用：
-  #
-  # since_days: 3650
-  #
-  # 用于补充历史论文。
-  #
-  # 等历史论文初始化完成后，
-  # 建议修改为：
-  #
-  # since_days: 7
-  #
-  # 用于日常追踪。
-  # ----------------------------------------------------------
+  # 日常追踪推荐 7 天
+  since_days: 7
 
-  since_days: 3650
-
-  # 已经出现过的论文不重复推送
+  # 已经推送过的论文不重复发送
   unique_only: true
 
   # 去重状态文件
   state_path: ".state/seen.json"
 
-  # 今天没有新论文时，
-  # 不拿旧论文补齐
+  # 今天没有新论文时，不用旧论文凑数
   fallback_when_empty: false
 
 
@@ -335,12 +415,11 @@ scrape:
   # 优先读取 arXiv HTML
   html: true
 
-  # HTML 没找到代码链接时，
-  # 尝试 PDF
+  # HTML 没找到代码链接时再尝试 PDF
   pdf_if_missing: true
 
   # 不强制扫描每篇 PDF 第一页
   pdf_first_page: false
 
-  # 网络请求超时时间
+  # 网络超时时间
   timeout: 10
