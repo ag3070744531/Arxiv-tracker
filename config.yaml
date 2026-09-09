@@ -2,159 +2,101 @@
 # Arxiv-tracker 配置文件
 #
 # 研究方向：
-# Internet Social Media Analysis
+# Social Media Analysis
 # Social Event Detection
 #
-# 项目目标：
+# 功能目标：
 # 1. 自动发现 Social Event Detection 相关论文
-# 2. 生成简短摘要，帮助快速判断是否值得阅读
-# 3. 尽量减少视频、医疗、工业、天文等无关 Event Detection 论文
+# 2. 使用 LLM 做简单摘要
+# 3. 帮助快速判断论文是否值得进一步阅读
 #
-# 论文的详细方法、实验和创新由人工阅读完成
+# 当前采用：
+# 高精度关键词 + 较短查询字符串
 # ============================================================
 
 
 # ============================================================
 # 1. arXiv 分类
-#
-# 优先保留与 Social Event Detection 更相关的领域：
-# - cs.SI：Social and Information Networks
-# - cs.IR：Information Retrieval
-# - cs.CL：NLP
-# - cs.LG：Machine Learning
-#
-# 删除 cs.AI，避免搜索范围过宽。
 # ============================================================
 
 categories:
-  - "cs.SI"
-  - "cs.IR"
-  - "cs.CL"
-  - "cs.LG"
+  - "cs.SI"   # Social and Information Networks
+  - "cs.IR"   # Information Retrieval
+  - "cs.CL"   # NLP
+  - "cs.LG"   # Machine Learning
 
 
 # ============================================================
 # 2. 搜索关键词
 #
-# 设计原则：
+# 注意：
+# 当前程序会把每一个关键词扩展到：
 #
-# 1. keywords 内部是 OR
-# 2. 因此每一个关键词本身都尽量绑定：
-#    social / social media / microblog
-# 3. 不再使用：
-#    event detection
-#    event discovery
-#    event clustering
-#    multimodal event detection
-#    等过宽关键词
+# title
+# abstract
+# comments
 #
-# 避免再次搜索到：
-# - 视频事件检测
-# - 医疗事件
-# - 工业事件
-# - 天文事件
-# - 一般 NLP Event Extraction
+# 同时还会自动生成连字符变体，
+# 所以关键词数量不能设置太多。
 #
-# Arxiv-tracker 会自动在：
-# title / abstract / comments
-# 中搜索，并扩展空格和连字符变体。
+# keywords 之间为 OR。
+#
+# 当前原则：
+# 每一个关键词本身都必须能够较明确地指向
+# Social Event Detection / Social Media Event Detection。
 # ============================================================
 
 keywords:
 
-  # ----------------------------------------------------------
-  # A. Social Event Detection 核心任务
-  # ----------------------------------------------------------
-
+  # 核心任务
   - "social event detection"
   - "social media event detection"
-  - "event detection in social media"
-  - "event detection from social media"
 
-
-  # ----------------------------------------------------------
-  # B. Social Event Discovery
-  # ----------------------------------------------------------
-
+  # 社交事件发现
   - "social event discovery"
   - "social media event discovery"
 
-
-  # ----------------------------------------------------------
-  # C. Social Event Clustering
-  # ----------------------------------------------------------
-
+  # 社交事件聚类
   - "social event clustering"
-  - "social media event clustering"
 
-
-  # ----------------------------------------------------------
-  # D. 无监督 Social Event Detection
-  # ----------------------------------------------------------
-
+  # 无监督方向
   - "unsupervised social event detection"
 
-
-  # ----------------------------------------------------------
-  # E. 增量 / 在线 / 流式 Social Event Detection
-  # ----------------------------------------------------------
-
+  # 增量 / 在线方向
   - "incremental social event detection"
   - "online social event detection"
-  - "streaming social event detection"
 
-
-  # ----------------------------------------------------------
-  # F. 图方法
-  # ----------------------------------------------------------
-
-  - "graph-based social event detection"
-
-
-  # ----------------------------------------------------------
-  # G. 多模态 Social Event Detection
-  # ----------------------------------------------------------
-
-  - "multimodal social event detection"
-
-
-  # ----------------------------------------------------------
-  # H. Microblog 场景
-  #
-  # 可以覆盖 Twitter / Weibo 等典型事件检测工作
-  # ----------------------------------------------------------
-
+  # 微博客场景
   - "microblog event detection"
-
-
-  # ----------------------------------------------------------
-  # I. Social Event Evolution
-  #
-  # 用于关注事件发现后的演化、更新和追踪
-  # ----------------------------------------------------------
-
-  - "social event evolution"
 
 
 # ============================================================
 # 3. 排除关键词
 #
-# 主关键词已经比较严格，
-# 所以只保留少量明显不相关领域。
+# 当前暂时关闭。
+#
+# 原因：
+# 当前 query.py 中排除逻辑存在：
+#
+# AND NOT
+#
+# 的 arXiv 查询语法问题。
+#
+# 在 query.py 修复为 ANDNOT 之前，
+# 保持空列表最安全。
+#
+# 由于现在所有正向关键词已经绑定 Social，
+# 即使不使用 exclude_keywords，
+# 无关论文数量也会比之前少很多。
 # ============================================================
 
-exclude_keywords:
-
-  # Event Camera / Neuromorphic Vision
-  - "event camera"
-  - "event-based vision"
-  - "neuromorphic"
+exclude_keywords: []
 
 
 # ============================================================
 # 4. 查询逻辑
 #
-# 实际逻辑：
+# 实际为：
 #
 # (
 #   cs.SI
@@ -170,24 +112,16 @@ exclude_keywords:
 #   OR social media event detection
 #   OR ...
 # )
-#
-# AND NOT
-#
-# (
-#   event camera
-#   OR event-based vision
-#   OR neuromorphic
-# )
 # ============================================================
 
 logic: "AND"
 
 
 # ============================================================
-# 5. 每次最多获取论文数量
+# 5. 最大论文数量
 #
-# 高精度追踪不需要每天推 30 篇。
-# 推荐最多 20 篇。
+# 每次最多获取 20 篇符合条件的论文。
+# 实际新论文可能少于 20 篇。
 # ============================================================
 
 max_results: 20
@@ -196,8 +130,7 @@ max_results: 20
 # ============================================================
 # 6. 排序
 #
-# lastUpdatedDate：
-# 按最近更新日期排序。
+# 按论文最近更新时间排序。
 # ============================================================
 
 sort_by: "lastUpdatedDate"
@@ -207,17 +140,26 @@ sort_order: "descending"
 # ============================================================
 # 7. 输出语言
 #
-# both = 中英文都保留
-# ============================================================
-
-lang: "both"
-
-
-# ============================================================
-# 8. 摘要设置
+# 主要面向中文阅读，
+# 因此直接使用 zh。
 #
-# 仅生成 TL;DR 简单摘要，
-# 不做详细 Method Card。
+# 原始英文标题、作者和 arXiv 链接仍然保留。
+# ============================================================
+
+lang: "zh"
+
+
+# ============================================================
+# 8. LLM 摘要
+#
+# 只做简单 TL;DR。
+#
+# 不进行：
+# - 详细方法分析
+# - 数据集分析
+# - 指标分析
+# - 创新点分析
+# - 局限性分析
 # ============================================================
 
 summary:
@@ -226,129 +168,114 @@ summary:
 
 
 # ============================================================
-# 9. 邮件发送
+# 9. 邮件配置
 # ============================================================
 
 email:
 
   enabled: true
 
-  # 邮件标题
   subject: "[arXiv] Social Event Detection Daily Digest"
 
-  # QQ 邮箱 SMTP
   smtp_server: "smtp.qq.com"
   smtp_port: 465
 
-  # GitHub Actions Secret：
+  # GitHub Secret：
+  #
   # SMTP_PASS
   #
-  # 填 QQ 邮箱 SMTP 授权码
+  # 必须使用 QQ 邮箱 SMTP 授权码
   smtp_pass_env: "SMTP_PASS"
 
-  # SMTP 模式
   tls: "ssl"
 
-  # 调试模式
   debug: false
 
-  # 邮件显示方式
   detail: "full"
 
-  # 一封邮件最多展示 20 篇
+  # 每封邮件最多显示 20 篇
   max_items: 20
 
-  # 附带 Markdown
+  # 附加 Markdown
   attach_md: true
 
-  # 不附带 PDF
+  # 不附加论文 PDF
   attach_pdf: false
 
 
 # ============================================================
 # 10. LLM 配置
 #
-# 使用 DeepSeek：
+# 使用：
 # deepseek-v4-flash-vision-exp
 #
-# 当前项目实际上只传入文本：
-# - title
-# - metadata
-# - abstract
-#
-# Vision 能力暂时不会使用。
+# API Key：
+# GitHub Actions Secret -> DS_API_KEY
 # ============================================================
 
 llm:
 
   provider: "openai-compatible"
 
-  # DeepSeek API
   base_url: "https://api.deepseek.com"
 
-  # 指定模型
   model: "deepseek-v4-flash-vision-exp"
 
-  # GitHub Actions Secret
   api_key_env: "DS_API_KEY"
 
 
-  # ==========================================================
-  # 英文摘要 Prompt
-  # ==========================================================
+  # ----------------------------------------------------------
+  # 英文 Prompt
+  # ----------------------------------------------------------
 
   system_prompt_en: |
-    You are an academic paper assistant focusing on Social Event Detection
-    and social media analysis.
+    You are an academic paper assistant focusing on
+    Social Event Detection and social media analysis.
 
-    Based on the provided paper title, metadata, and abstract,
-    write a short and clear summary.
+    Based on the paper title, metadata, and abstract,
+    provide a short summary explaining:
 
-    Briefly explain:
     1. what problem the paper studies,
     2. what main method it uses,
-    3. what main result or conclusion it reports.
+    3. what main conclusion it reports.
 
     Keep the summary concise and objective.
-    Do not invent information that is not provided.
+    Do not invent information.
 
 
-  # ==========================================================
-  # 中文摘要 Prompt
-  # ==========================================================
+  # ----------------------------------------------------------
+  # 中文 Prompt
+  # ----------------------------------------------------------
 
   system_prompt_zh: |
-    你是一个面向互联网社交媒体分析与
-    Social Event Detection 的论文阅读助手。
+    你是一个面向 Social Event Detection
+    和社交媒体分析的论文阅读助手。
 
-    请根据论文标题、元信息和摘要，
-    用一段简洁中文概括论文主要内容。
+    根据论文标题、元信息和摘要，
+    用简短中文概括：
 
-    简单说明：
     1. 论文研究什么问题；
-    2. 使用了什么主要方法；
-    3. 得到了什么主要结果或结论。
+    2. 使用什么主要方法；
+    3. 得到什么主要结论。
 
-    保持简洁、客观。
-    不要补充原文中没有提供的信息。
+    保持简洁、客观，
+    不要补充原文中没有的信息。
 
 
 # ============================================================
-# 11. 中文翻译
+# 11. 翻译
 #
-# 翻译论文标题与原始摘要。
+# 关闭额外翻译。
 #
-# 如果后续希望减少 API 调用，
-# 可以改为：
-#
-# enabled: false
-#
-# 并将 lang 改为 zh。
+# 原因：
+# 当前 LLM 摘要已经直接输出中文，
+# 没必要再单独调用一次模型翻译摘要，
+# 可以明显减少 API 调用次数。
 # ============================================================
 
 translate:
 
-  enabled: true
+  enabled: false
 
   lang: "zh"
 
@@ -365,61 +292,51 @@ site:
 
   enabled: true
 
-  # 输出目录
   dir: "docs"
 
-  # 网站标题
   title: "Social Event Detection 论文速递"
 
-  # 历史页面保留数量
   keep_runs: 1024
 
-  # 页面主题
   theme: "light"
 
-  # 主题色
   accent: "#2563eb"
 
 
 # ============================================================
-# 13. Freshness & 跨天去重
+# 13. Freshness & 去重
 #
-# 如果已经完成第一次历史论文初始化，
-# 推荐使用 7 天窗口。
+# 最近 7 天窗口。
 #
-# 这样每天只搜索最近 7 天，
-# 再结合 seen.json 去重。
+# seen.json 负责跨天去重。
 # ============================================================
 
 freshness:
 
-  # 日常追踪推荐 7 天
   since_days: 7
 
-  # 已经推送过的论文不重复发送
   unique_only: true
 
-  # 去重状态文件
   state_path: ".state/seen.json"
 
-  # 今天没有新论文时，不用旧论文凑数
+  # 没有新论文时不要使用旧论文凑数量
   fallback_when_empty: false
 
 
 # ============================================================
-# 14. 论文代码 / 项目主页抓取
+# 14. 代码 / 项目主页抓取
 # ============================================================
 
 scrape:
 
-  # 优先读取 arXiv HTML
+  # 优先从 arXiv HTML 页面寻找代码链接
   html: true
 
-  # HTML 没找到代码链接时再尝试 PDF
+  # HTML 没找到时再尝试 PDF
   pdf_if_missing: true
 
-  # 不强制扫描每篇 PDF 第一页
+  # 不主动扫描所有 PDF 第一页
   pdf_first_page: false
 
-  # 网络超时时间
+  # HTTP 超时时间
   timeout: 10
